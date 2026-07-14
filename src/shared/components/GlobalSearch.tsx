@@ -14,6 +14,7 @@ import { useOrders } from '@/features/orders/hooks'
 import { useCustomers } from '@/features/customers/hooks'
 import { useSuppliers } from '@/features/suppliers/hooks'
 import { useCategories } from '@/features/categories/hooks'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib/utils'
 
 interface SearchResult {
@@ -27,6 +28,7 @@ interface SearchResult {
 const typeIcon = { product: Package, order: ShoppingCart, customer: Users, supplier: Truck, category: Tags }
 
 export function GlobalSearch({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
+  const { t } = useTranslation()
   const [query, setQuery] = React.useState('')
   const navigate = useNavigate()
 
@@ -91,16 +93,16 @@ export function GlobalSearch({ open, onOpenChange }: { open: boolean; onOpenChan
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search products, orders, customers..."
+            placeholder={t('common.searchPlaceholder')}
             className="h-12 border-0 focus-visible:ring-0"
           />
         </div>
         <div className="max-h-80 overflow-y-auto p-2">
           {query && results.length === 0 && (
-            <p className="py-8 text-center text-sm text-muted-foreground">No results for "{query}"</p>
+            <p className="py-8 text-center text-sm text-muted-foreground">{t('common.noResultsQuery', { query })}</p>
           )}
           {!query && (
-            <p className="py-8 text-center text-sm text-muted-foreground">Type to search across your store</p>
+            <p className="py-8 text-center text-sm text-muted-foreground">{t('common.typeToSearch')}</p>
           )}
           {results.map((r) => {
             const Icon = typeIcon[r.type]

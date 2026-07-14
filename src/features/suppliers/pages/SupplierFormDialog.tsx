@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { FormInput } from '@/shared/components/form'
 
 const supplierSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  name: z.string().min(1),
   contactName: z.string().optional(),
   email: z.string().optional(),
   phone: z.string().optional(),

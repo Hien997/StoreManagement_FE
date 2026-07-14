@@ -1,12 +1,15 @@
 import { NavLink } from 'react-router-dom'
 import { ChevronLeft, Store } from 'lucide-react'
 
-import { navGroups } from '@/shared/components/nav-config'
+import { useNavGroups } from '@/shared/components/nav-config'
 import { Button } from '@/shared/components/ui/button'
 import { useUIStore } from '@/shared/store/useUIStore'
+import { useTranslation } from 'react-i18next'
 import { cn } from '@/shared/lib/utils'
 
 export function Sidebar() {
+  const { t } = useTranslation()
+  const navGroups = useNavGroups()
   const collapsed = useUIStore((s) => s.sidebarCollapsed)
   const toggle = useUIStore((s) => s.toggleSidebar)
 
@@ -66,7 +69,7 @@ export function Sidebar() {
       <div className="border-t p-3">
         <Button variant="ghost" size="sm" className="w-full justify-center" onClick={toggle}>
           <ChevronLeft className={cn('h-4 w-4 transition-transform', collapsed && 'rotate-180')} />
-          {!collapsed && <span>Collapse</span>}
+          {!collapsed && <span>{t('common.collapse')}</span>}
         </Button>
       </div>
     </aside>
