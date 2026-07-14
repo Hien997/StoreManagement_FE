@@ -103,18 +103,39 @@
     "editBrand": "Edit Brand",
     "addBrand": "Add Brand",
     "updateBrandDetails": "Update the brand details.",
-    "createBrandDetails": "Create a new brand."
+    "createBrandDetails": "Create a new brand.",
+    "collapse": "Collapse",
+    "notifications": "Notifications",
+    "markAllRead": "Mark all read",
+    "noNotifications": "No notifications",
+    "searchPlaceholder": "Search products, orders, customers...",
+    "noResultsQuery": "No results for \"{{query}}\"",
+    "typeToSearch": "Type to search across your store",
+    "toggleTheme": "Toggle theme",
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    }
   },
   "nav": {
     "dashboard": "Dashboard",
     "products": "Products",
     "categories": "Categories",
+    "brands": "Brands",
     "inventory": "Inventory",
+    "stock": "Stock",
     "orders": "Orders",
     "customers": "Customers",
     "suppliers": "Suppliers",
     "reports": "Reports",
-    "settings": "Settings"
+    "settings": "Settings",
+    "groups": {
+      "overview": "Overview",
+      "operations": "Operations",
+      "analytics": "Analytics",
+      "system": "System"
+    }
   },
   "auth": {
     "profile": "Profile",

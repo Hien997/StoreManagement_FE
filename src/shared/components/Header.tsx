@@ -18,8 +18,10 @@ import { GlobalSearch } from '@/shared/components/GlobalSearch'
 import { LanguageSwitcher } from '@/shared/components/LanguageSwitcher'
 import { useAuthStore } from '@/shared/store/useAuthStore'
 import { useUIStore } from '@/shared/store/useUIStore'
+import { useTranslation } from 'react-i18next'
 
 export function Header() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const user = useAuthStore((s) => s.user)
   const logout = useAuthStore((s) => s.logout)
@@ -50,7 +52,7 @@ export function Header() {
         className="flex h-9 flex-1 items-center gap-2 rounded-md border bg-muted/40 px-3 text-sm text-muted-foreground transition-colors hover:bg-muted md:max-w-md"
       >
         <Search className="h-4 w-4" />
-        <span className="flex-1 text-left">Search...</span>
+        <span className="flex-1 text-left">{t('common.search')}</span>
         <kbd className="hidden rounded border bg-background px-1.5 text-[10px] font-medium sm:inline-block">⌘K</kbd>
       </button>
 
@@ -76,14 +78,14 @@ export function Header() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => navigate('/settings')}>
-              <UserIcon className="h-4 w-4" /> Profile
+              <UserIcon className="h-4 w-4" /> {t('auth.profile')}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => navigate('/settings')}>
-              <Settings className="h-4 w-4" /> Settings
+              <Settings className="h-4 w-4" /> {t('nav.settings')}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout} className="text-destructive focus:text-destructive">
-              <LogOut className="h-4 w-4" /> Log out
+              <LogOut className="h-4 w-4" /> {t('auth.logOut')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
