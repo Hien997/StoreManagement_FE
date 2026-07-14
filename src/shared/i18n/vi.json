@@ -103,18 +103,39 @@
     "editBrand": "Sửa thương hiệu",
     "addBrand": "Thêm thương hiệu",
     "updateBrandDetails": "Cập nhật thông tin thương hiệu.",
-    "createBrandDetails": "Tạo một thương hiệu mới."
+    "createBrandDetails": "Tạo một thương hiệu mới.",
+    "collapse": "Thu gọn",
+    "notifications": "Thông báo",
+    "markAllRead": "Đánh dấu đã đọc",
+    "noNotifications": "Không có thông báo",
+    "searchPlaceholder": "Tìm kiếm sản phẩm, đơn hàng, khách hàng...",
+    "noResultsQuery": "Không có kết quả cho \"{{query}}\"",
+    "typeToSearch": "Nhập để tìm kiếm trong cửa hàng",
+    "toggleTheme": "Chuyển đổi giao diện",
+    "theme": {
+      "light": "Sáng",
+      "dark": "Tối",
+      "system": "Hệ thống"
+    }
   },
   "nav": {
     "dashboard": "Bảng điều khiển",
     "products": "Sản phẩm",
     "categories": "Danh mục",
+    "brands": "Thương hiệu",
     "inventory": "Kho hàng",
+    "stock": "Tồn kho",
     "orders": "Đơn hàng",
     "customers": "Khách hàng",
     "suppliers": "Nhà cung cấp",
     "reports": "Báo cáo",
-    "settings": "Cài đặt"
+    "settings": "Cài đặt",
+    "groups": {
+      "overview": "Tổng quan",
+      "operations": "Vận hành",
+      "analytics": "Phân tích",
+      "system": "Hệ thống"
+    }
   },
   "auth": {
     "profile": "Hồ sơ",

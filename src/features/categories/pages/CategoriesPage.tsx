@@ -25,7 +25,7 @@ import { useTranslation } from 'react-i18next'
 import { FormInput } from '@/shared/components/form'
 
 const categorySchema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  name: z.string().min(1),
   slug: z.string().optional(),
   description: z.string().optional(),
 })
