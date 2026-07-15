@@ -36,7 +36,7 @@ export function StatCard({
   }
   const positive = (trend?.value ?? 0) >= 0;
   return (
-    <Card className={cn("overflow-hidden", className)}>
+    <Card className={cn("overflow-hidden transition-all duration-200 hover:shadow-md hover:-translate-y-0.5", className)}>
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <p className="text-sm font-medium text-muted-foreground">{title}</p>

@@ -1,0 +1,1 @@
+import{a as o}from"./query-vendor-C1Ijw2rG.js";import{aV as u}from"./index-C3yP_5Ta.js";function n(){return o({mutationFn:t=>u.login(t)})}function i(){return o({mutationFn:t=>u.register(t)})}export{i as a,n as u};

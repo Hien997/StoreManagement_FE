@@ -18,6 +18,8 @@ import { Input } from '@/shared/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/components/ui/table'
 import { Skeleton } from '@/shared/components/ui/skeleton'
+import { EmptyState } from '@/shared/components/EmptyState'
+import { PackageOpen } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 import { useTranslation } from 'react-i18next'
 
@@ -133,9 +135,9 @@ export function DataTable<TData, TValue>({
               ))
             ) : rows.length === 0 ? (
               <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
-                    {t('common.noResults')}
-                  </TableCell>
+                <TableCell colSpan={columns.length} className="p-0">
+                  <EmptyState icon={PackageOpen} title={t('common.noResults')} />
+                </TableCell>
               </TableRow>
             ) : virtualized ? (
               <tr style={{ height: paddingTop }} />

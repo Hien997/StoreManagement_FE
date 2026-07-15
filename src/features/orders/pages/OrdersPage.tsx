@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/components/ui/select'
-import { useOrders, useDeleteOrder, useUpdateOrderStatus } from '@/features/orders/hooks'
+import { useOrders, useDeleteOrder, useUpdateOrderStatus } from '@/features/orders'
 import { toOrder } from '@/types/api/mappers'
 import type { Order, OrderStatus } from '@/shared/lib/types'
 import { formatCurrency, formatDate } from '@/shared/lib/format'
@@ -56,67 +56,74 @@ export function OrdersPage() {
     }
   }
 
-  const handleStatusChange = (order: Order, status: 'pending' | 'completed' | 'cancelled') => {
-    updateOrderStatus.mutate(
-      { id: Number(order.id), body: { status } },
-      {
-        onError: (err: { message?: string }) =>
-          toast({ title: t('order.updateStatusFailed'), description: err.message, variant: 'destructive' }),
-      },
-    )
-  }
+  const handleStatusChange = React.useCallback(
+    (order: Order, status: 'pending' | 'completed' | 'cancelled') => {
+      updateOrderStatus.mutate(
+        { id: Number(order.id), body: { status } },
+        {
+          onError: (err: { message?: string }) =>
+            toast({ title: t('order.updateStatusFailed'), description: err.message, variant: 'destructive' }),
+        },
+      )
+    },
+    [updateOrderStatus, toast, t],
+  )
 
-  const columns: ColumnDef<Order>[] = [
-    { accessorKey: 'orderNumber', header: t('order.orderNumber'), cell: ({ getValue }) => <span className="font-medium">{getValue<string>()}</span> },
-    { accessorKey: 'customerName', header: t('order.customer'), cell: ({ getValue }) => <span className="text-sm">{getValue<string>()}</span> },
-    {
-      accessorKey: 'status',
-      header: t('common.status'),
-      cell: ({ row }) => (
-        <Select
-          value={row.original.status as 'pending' | 'completed' | 'cancelled'}
-          onValueChange={(v) => handleStatusChange(row.original, v as 'pending' | 'completed' | 'cancelled')}
-        >
-          <SelectTrigger className="h-8 w-36">
-            <SelectValue>
-              <Badge variant={statusVariant[row.original.status]} className="capitalize">
-                {row.original.status}
-              </Badge>
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            {statusOptions.map((s) => (
-              <SelectItem key={s} value={s} className="capitalize">
-                {s}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      ),
-    },
-    { accessorKey: 'total', header: t('common.total'), cell: ({ getValue }) => <span className="font-medium">{formatCurrency(getValue<number>())}</span> },
-    { accessorKey: 'createdAt', header: t('common.date'), cell: ({ getValue }) => <span className="text-sm">{formatDate(getValue<string>())}</span> },
-    {
-      id: 'actions',
-      header: '',
-      cell: ({ row }) => (
-        <div className="flex justify-end gap-1">
-          <Button variant="ghost" size="icon" onClick={() => navigate(`/orders/${row.original.id}`)}>
-            <Eye className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon" className="text-destructive" onClick={() => setDeleteTarget(row.original)}>
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </div>
-      ),
-    },
-  ]
+  const columns = React.useMemo<ColumnDef<Order>[]>(
+    () => [
+      { accessorKey: 'orderNumber', header: t('order.orderNumber'), cell: ({ getValue }) => <span className="font-medium">{getValue<string>()}</span> },
+      { accessorKey: 'customerName', header: t('order.customer'), cell: ({ getValue }) => <span className="text-sm">{getValue<string>()}</span> },
+      {
+        accessorKey: 'status',
+        header: t('common.status'),
+        cell: ({ row }) => (
+          <Select
+            value={row.original.status as 'pending' | 'completed' | 'cancelled'}
+            onValueChange={(v) => handleStatusChange(row.original, v as 'pending' | 'completed' | 'cancelled')}
+          >
+            <SelectTrigger className="h-8 w-36">
+              <SelectValue>
+                <Badge variant={statusVariant[row.original.status]} className="capitalize">
+                  {row.original.status}
+                </Badge>
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              {statusOptions.map((s) => (
+                <SelectItem key={s} value={s} className="capitalize">
+                  {s}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        ),
+      },
+      { accessorKey: 'total', header: t('common.total'), cell: ({ getValue }) => <span className="font-medium">{formatCurrency(getValue<number>())}</span> },
+      { accessorKey: 'createdAt', header: t('common.date'), cell: ({ getValue }) => <span className="text-sm">{formatDate(getValue<string>())}</span> },
+      {
+        id: 'actions',
+        header: '',
+        cell: ({ row }) => (
+          <div className="flex justify-end gap-1">
+            <Button variant="ghost" size="icon" onClick={() => navigate(`/orders/${row.original.id}`)}>
+              <Eye className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="text-destructive" onClick={() => setDeleteTarget(row.original)}>
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        ),
+      },
+    ],
+    [t, navigate, handleStatusChange],
+  )
 
   return (
     <div className="space-y-6">
       <PageHeader
         title={t('order.title')}
         description={t('order.description', { count: orders.length })}
+        icon={ShoppingCart}
         actions={
           <Button onClick={() => navigate('/orders/new')}>
             <Plus className="h-4 w-4" /> {t('order.add')}

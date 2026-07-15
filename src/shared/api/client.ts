@@ -22,10 +22,44 @@ export function clearTokens(): void {
   localStorage.removeItem(REFRESH_KEY)
 }
 
+// Customer (storefront) token storage — kept separate from admin tokens.
+const CUSTOMER_ACCESS_KEY = 'store.customer_access_token'
+const CUSTOMER_REFRESH_KEY = 'store.customer_refresh_token'
+
+export function getCustomerAccessToken(): string | null {
+  return localStorage.getItem(CUSTOMER_ACCESS_KEY)
+}
+
+export function setCustomerTokens(access: string, refresh: string): void {
+  localStorage.setItem(CUSTOMER_ACCESS_KEY, access)
+  localStorage.setItem(CUSTOMER_REFRESH_KEY, refresh)
+}
+
+export function clearCustomerTokens(): void {
+  localStorage.removeItem(CUSTOMER_ACCESS_KEY)
+  localStorage.removeItem(CUSTOMER_REFRESH_KEY)
+}
+
 export const apiClient: AxiosInstance = axios.create({
   baseURL: 'http://localhost:8080/api/v1',
   timeout: 15000,
   headers: { 'Content-Type': 'application/json' },
+})
+
+// Dedicated client for customer/storefront endpoints. Uses the customer token
+// so admin and customer sessions never collide.
+export const customerApiClient: AxiosInstance = axios.create({
+  baseURL: 'http://localhost:8080/api/v1',
+  timeout: 15000,
+  headers: { 'Content-Type': 'application/json' },
+})
+
+customerApiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const token = getCustomerAccessToken()
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
 })
 
 apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {

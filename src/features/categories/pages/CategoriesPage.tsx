@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ChevronRight, Folder, FolderOpen, Pencil, Plus, Trash2 } from 'lucide-react'
+import { ChevronRight, Folder, FolderOpen, FolderTree, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -16,7 +16,7 @@ import {
   DialogTitle,
 } from '@/shared/components/ui/dialog'
 import { ConfirmDialog } from '@/shared/components/ui/confirm-dialog'
-import { useCategories, useCreateCategory, useUpdateCategory, useDeleteCategory } from '@/features/categories/hooks'
+import { useCategories, useCreateCategory, useUpdateCategory, useDeleteCategory } from '@/features/categories'
 import { toCategory } from '@/types/api/mappers'
 import type { Category } from '@/shared/lib/types'
 import { useToast } from '@/shared/components/ui/toast'
@@ -188,6 +188,7 @@ export function CategoriesPage() {
       <PageHeader
         title={t('category.title')}
         description={t('category.description')}
+        icon={FolderTree}
         actions={
           <Button onClick={openCreate}>
             <Plus className="h-4 w-4" /> {t('category.add')}

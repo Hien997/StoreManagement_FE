@@ -40,6 +40,7 @@ export const toProduct = (p: ProductResponse): Product => ({
   sku: p.sku,
   barcode: "",
   name: p.name,
+  description: p.description ?? "",
   categoryId: String(p.category_id),
   brand: String(p.brand_id),
   supplierId: String(p.supplier_id),

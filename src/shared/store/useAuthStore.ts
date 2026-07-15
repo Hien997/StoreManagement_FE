@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { clearTokens, setTokens } from '@/shared/api/client'
-import { authService } from '@/features/auth/service'
-import type { UserInfo } from '@/features/auth/types'
+import { authService } from '@/features/auth'
+import type { UserInfo } from '@/features/auth'
 
 interface AuthState {
   user: UserInfo | null

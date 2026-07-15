@@ -1,0 +1,126 @@
+/* Storefront design system — "Vibrant & Block-based" e-commerce theme.
+   Scoped under .storefront so the admin dashboard keeps its own tokens.
+   Palette: pharmacy green primary (#15803D) + trust blue accent (#0369A1).
+   Type: Rubik (display) / Nunito Sans (body). Motion: 200-300ms. */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700;800&family=Rubik:wght@400;500;600;700;800&display=swap');
+
+.storefront {
+  --background: 140 50% 98%;
+  --foreground: 142 64% 14%;
+  --card: 0 0% 100%;
+  --card-foreground: 142 64% 14%;
+  --primary: 142 64% 32%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 142 40% 94%;
+  --secondary-foreground: 142 64% 20%;
+  --muted: 142 30% 95%;
+  --muted-foreground: 142 12% 40%;
+  --accent: 201 88% 32%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 142 30% 88%;
+  --input: 142 30% 88%;
+  --ring: 142 64% 32%;
+  --radius: 0.85rem;
+
+  font-family: 'Nunito Sans', ui-sans-serif, system-ui, sans-serif;
+  color: hsl(var(--foreground));
+}
+
+.storefront .dark {
+  --background: 150 30% 7%;
+  --foreground: 140 20% 92%;
+  --card: 150 24% 10%;
+  --card-foreground: 140 20% 92%;
+  --primary: 142 58% 45%;
+  --primary-foreground: 150 30% 7%;
+  --secondary: 150 20% 16%;
+  --secondary-foreground: 140 20% 92%;
+  --muted: 150 18% 14%;
+  --muted-foreground: 140 12% 65%;
+  --accent: 201 80% 52%;
+  --accent-foreground: 150 30% 7%;
+  --destructive: 0 62% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 150 18% 20%;
+  --input: 150 18% 20%;
+  --ring: 142 58% 45%;
+}
+
+.storefront h1,
+.storefront h2,
+.storefront h3,
+.storefront h4,
+.storefront .font-display {
+  font-family: 'Rubik', 'Nunito Sans', ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* Depth: consistent elevation scale for cards/sheets */
+.storefront .shadow-store {
+  box-shadow: 0 1px 2px hsl(142 64% 14% / 0.04), 0 8px 24px hsl(142 64% 14% / 0.08);
+}
+
+.storefront .shadow-store-lg {
+  box-shadow: 0 2px 4px hsl(142 64% 14% / 0.06), 0 18px 40px hsl(142 64% 14% / 0.14);
+}
+
+/* Hero gradient using the brand palette */
+.store-hero {
+  background:
+    radial-gradient(1100px 420px at 85% -15%, hsl(var(--accent) / 0.16), transparent),
+    radial-gradient(900px 360px at 0% 0%, hsl(var(--primary) / 0.16), transparent),
+    linear-gradient(180deg, hsl(var(--muted)) 0%, hsl(var(--background)) 100%);
+}
+
+.store-section {
+  scroll-margin-top: 5rem;
+}
+
+/* Bold hover lift for product/category cards */
+.storefront .card-lift {
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+.storefront .card-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 2px 4px hsl(142 64% 14% / 0.06), 0 22px 44px hsl(142 64% 14% / 0.16);
+  border-color: hsl(var(--primary) / 0.4);
+}
+
+/* Quick-view affordance */
+.storefront .quick-view {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+.storefront .group:hover .quick-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 28s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .storefront .card-lift,
+  .storefront .quick-view {
+    animation: none;
+    transition: none;
+  }
+  .storefront .card-lift:hover {
+    transform: none;
+  }
+}

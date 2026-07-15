@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { ArrowLeft, Mail, MapPin, Phone } from 'lucide-react'
 
 import { PageHeader } from '@/shared/components/PageHeader'
@@ -7,12 +8,13 @@ import { Button } from '@/shared/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar'
 import { Badge } from '@/shared/components/ui/badge'
-import { useCustomer } from '@/features/customers/hooks'
-import { useOrders } from '@/features/orders/hooks'
+import { useCustomer } from '@/features/customers'
+import { useOrders } from '@/features/orders'
 import { toCustomer, toOrder } from '@/types/api/mappers'
 import { formatCurrency, formatDate } from '@/shared/lib/format'
 
 export function CustomerDetailPage() {
+  const { t } = useTranslation()
   const { id } = useParams()
   const navigate = useNavigate()
   const customerId = Number(id)
@@ -25,9 +27,9 @@ export function CustomerDetailPage() {
     return (
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => navigate('/customers')}>
-          <ArrowLeft className="h-4 w-4" /> Back
+          <ArrowLeft className="h-4 w-4" /> {t('customer.back')}
         </Button>
-        <p className="text-muted-foreground">Loading customer…</p>
+        <p className="text-muted-foreground">{t('customer.loading')}</p>
       </div>
     )
   }
@@ -36,9 +38,9 @@ export function CustomerDetailPage() {
     return (
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => navigate('/customers')}>
-          <ArrowLeft className="h-4 w-4" /> Back
+          <ArrowLeft className="h-4 w-4" /> {t('customer.back')}
         </Button>
-        <p className="text-muted-foreground">Customer not found.</p>
+        <p className="text-muted-foreground">{t('customer.notFound')}</p>
       </div>
     )
   }
@@ -48,10 +50,10 @@ export function CustomerDetailPage() {
   return (
     <div className="space-y-6">
       <Button variant="ghost" onClick={() => navigate('/customers')}>
-        <ArrowLeft className="h-4 w-4" /> Back to Customers
+        <ArrowLeft className="h-4 w-4" /> {t('customer.backToCustomers')}
       </Button>
 
-      <PageHeader title={customer.name} description={`Customer since ${formatDate(customer.createdAt)}`} />
+      <PageHeader title={customer.name} description={t('customer.since', { date: formatDate(customer.createdAt) })} />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <Card>
@@ -69,11 +71,11 @@ export function CustomerDetailPage() {
             <div className="mt-4 grid w-full grid-cols-2 gap-2">
               <div className="rounded-lg bg-muted p-3 text-center">
                 <p className="text-lg font-bold">{customer.totalOrders}</p>
-                <p className="text-xs text-muted-foreground">Orders</p>
+                <p className="text-xs text-muted-foreground">{t('customer.orders')}</p>
               </div>
               <div className="rounded-lg bg-muted p-3 text-center">
                 <p className="text-lg font-bold">{formatCurrency(customer.totalSpent)}</p>
-                <p className="text-xs text-muted-foreground">Spent</p>
+                <p className="text-xs text-muted-foreground">{t('customer.spent')}</p>
               </div>
             </div>
           </CardContent>
@@ -81,11 +83,11 @@ export function CustomerDetailPage() {
 
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle className="text-base">Order History</CardTitle>
+            <CardTitle className="text-base">{t('customer.orderHistory')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             {customerOrders.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No orders yet.</p>
+              <p className="text-sm text-muted-foreground">{t('customer.noOrders')}</p>
             ) : (
               customerOrders.map((o) => (
                 <Link

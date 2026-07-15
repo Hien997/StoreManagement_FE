@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,7 +12,7 @@ import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { useAuthStore } from "@/shared/store/useAuthStore";
 import { useToast } from "@/shared/components/ui/toast";
-import { useLoginMutation } from "@/features/auth/mutations";
+import { useLoginMutation } from "@/features/auth";
 import { ApiError } from "@/shared/types/api/response";
 
 const loginSchema = z.object({
@@ -22,6 +23,7 @@ const loginSchema = z.object({
 type LoginValues = z.infer<typeof loginSchema>;
 
 export function LoginPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const setSession = useAuthStore((s) => s.setSession);
@@ -50,8 +52,8 @@ export function LoginPage() {
       onSuccess: (res) => {
         setSession(res.user, res.access_token, res.refresh_token);
         toast({
-          title: "Welcome back!",
-          description: "You have signed in successfully.",
+          title: t("auth.welcome"),
+          description: t("auth.signedInSuccess"),
           variant: "success",
         });
         navigate((location.state as { from?: string })?.from ?? "/", {
@@ -63,10 +65,10 @@ export function LoginPage() {
         const message =
           err instanceof ApiError
             ? err.message
-            : "Login failed. Please try again.";
+            : t("auth.loginFailedDesc");
         console.log("🚀 ~ onSubmit ~ message:", message);
         toast({
-          title: "Login failed",
+          title: t("auth.loginFailed"),
           description: message,
           variant: "destructive",
         });
@@ -88,13 +90,13 @@ export function LoginPage() {
           </div>
           <h1 className="text-2xl font-bold tracking-tight">StorePro</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Sign in to your dashboard
+            {t("auth.signIn")}
           </p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
+            <Label htmlFor="username">{t("common.username")}</Label>
             <div className="relative">
               <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
@@ -112,7 +114,7 @@ export function LoginPage() {
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">{t("common.password")}</Label>
             <div className="relative">
               <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
@@ -138,7 +140,7 @@ export function LoginPage() {
             {loginMutation.isPending && (
               <Loader2 className="h-4 w-4 animate-spin" />
             )}
-            Sign In
+            {t("auth.signInButton")}
           </Button>
         </form>
       </motion.div>
