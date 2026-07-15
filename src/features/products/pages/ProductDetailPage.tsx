@@ -17,11 +17,11 @@ import {
   AvatarImage,
 } from "@/shared/components/ui/avatar";
 import { Separator } from "@/shared/components/ui/separator";
-import { useProduct } from "@/features/products/hooks";
-import { useCategories } from "@/features/categories/hooks";
-import { useSuppliers } from "@/features/suppliers/hooks";
-import { useBrands } from "@/features/brands/hooks";
-import { useInventory } from "@/features/inventory/hooks";
+import { useProduct } from "@/features/products";
+import { useCategories } from "@/features/categories";
+import { useSuppliers } from "@/features/suppliers";
+import { useBrands } from "@/features/brands";
+import { useInventory } from "@/features/inventory";
 import {
   toProduct,
   toCategory,

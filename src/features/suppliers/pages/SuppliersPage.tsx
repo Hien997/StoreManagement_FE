@@ -7,8 +7,8 @@ import { PageHeader } from '@/shared/components/PageHeader'
 import { DataTable } from '@/shared/components/DataTable'
 import { Button } from '@/shared/components/ui/button'
 import { ConfirmDialog } from '@/shared/components/ui/confirm-dialog'
-import { useSuppliers, useDeleteSupplier } from '@/features/suppliers/hooks'
-import { useProducts } from '@/features/products/hooks'
+import { useSuppliers, useDeleteSupplier } from '@/features/suppliers'
+import { useProducts } from '@/features/products'
 import { SupplierFormDialog } from './SupplierFormDialog'
 import { toSupplier, toProduct } from '@/types/api/mappers'
 import type { SupplierResponse } from '@/types/api'
@@ -45,11 +45,14 @@ export function SuppliersPage() {
     setFormOpen(true)
   }
 
-  const openEdit = (s: Supplier) => {
-    const raw = suppliersData?.items.find((item) => String(item.id) === s.id) ?? null
-    setEditing(raw)
-    setFormOpen(true)
-  }
+  const openEdit = React.useCallback(
+    (s: Supplier) => {
+      const raw = suppliersData?.items.find((item) => String(item.id) === s.id) ?? null
+      setEditing(raw)
+      setFormOpen(true)
+    },
+    [suppliersData],
+  )
 
   const handleDelete = async () => {
     if (!deleteTarget) return
@@ -63,59 +66,63 @@ export function SuppliersPage() {
     }
   }
 
-  const columns: ColumnDef<Supplier>[] = [
-    {
-      accessorKey: 'name',
-      header: t('common.supplier'),
-      cell: ({ row }) => (
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary">
-            <Truck className="h-4 w-4" />
+  const columns = React.useMemo<ColumnDef<Supplier>[]>(
+    () => [
+      {
+        accessorKey: 'name',
+        header: t('common.supplier'),
+        cell: ({ row }) => (
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary">
+              <Truck className="h-4 w-4" />
+            </div>
+            <div>
+              <p className="font-medium">{row.original.name}</p>
+              <p className="text-xs text-muted-foreground">{row.original.contactName}</p>
+            </div>
           </div>
-          <div>
-            <p className="font-medium">{row.original.name}</p>
-            <p className="text-xs text-muted-foreground">{row.original.contactName}</p>
+        ),
+      },
+      { accessorKey: 'email', header: t('common.email'), cell: ({ getValue }) => <span className="text-sm">{getValue<string>()}</span> },
+      { accessorKey: 'phone', header: t('common.phone'), cell: ({ getValue }) => <span className="text-sm">{getValue<string>()}</span> },
+      {
+        id: 'products',
+        header: t('common.products'),
+        cell: ({ row }) => <span className="text-sm">{productCount[row.original.id] ?? 0}</span>,
+      },
+      {
+        accessorKey: 'outstandingBalance',
+        header: t('common.balance'),
+        cell: ({ getValue }) => <span className="font-medium">{formatCurrency(getValue<number>())}</span>,
+      },
+      { accessorKey: 'createdAt', header: t('common.since'), cell: ({ getValue }) => <span className="text-sm">{formatDate(getValue<string>())}</span> },
+      {
+        id: 'actions',
+        header: '',
+        cell: ({ row }) => (
+          <div className="flex justify-end gap-1">
+            <Button variant="ghost" size="icon" onClick={() => navigate(`/suppliers/${row.original.id}`)}>
+              <Eye className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" onClick={() => openEdit(row.original)}>
+              <Pencil className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="text-destructive" onClick={() => setDeleteTarget(row.original)}>
+              <Trash2 className="h-4 w-4" />
+            </Button>
           </div>
-        </div>
-      ),
-    },
-    { accessorKey: 'email', header: t('common.email'), cell: ({ getValue }) => <span className="text-sm">{getValue<string>()}</span> },
-    { accessorKey: 'phone', header: t('common.phone'), cell: ({ getValue }) => <span className="text-sm">{getValue<string>()}</span> },
-    {
-      id: 'products',
-      header: t('common.products'),
-      cell: ({ row }) => <span className="text-sm">{productCount[row.original.id] ?? 0}</span>,
-    },
-    {
-      accessorKey: 'outstandingBalance',
-      header: t('common.balance'),
-      cell: ({ getValue }) => <span className="font-medium">{formatCurrency(getValue<number>())}</span>,
-    },
-    { accessorKey: 'createdAt', header: t('common.since'), cell: ({ getValue }) => <span className="text-sm">{formatDate(getValue<string>())}</span> },
-    {
-      id: 'actions',
-      header: '',
-      cell: ({ row }) => (
-        <div className="flex justify-end gap-1">
-          <Button variant="ghost" size="icon" onClick={() => navigate(`/suppliers/${row.original.id}`)}>
-            <Eye className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon" onClick={() => openEdit(row.original)}>
-            <Pencil className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon" className="text-destructive" onClick={() => setDeleteTarget(row.original)}>
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </div>
-      ),
-    },
-  ]
+        ),
+      },
+    ],
+    [t, navigate, productCount, openEdit],
+  )
 
   return (
     <div className="space-y-6">
       <PageHeader
         title={t('supplier.title')}
         description={t('supplier.description', { count: suppliers.length })}
+        icon={Truck}
         actions={
           <Button onClick={openNew}>
             <Plus className="h-4 w-4" /> {t('supplier.add')}

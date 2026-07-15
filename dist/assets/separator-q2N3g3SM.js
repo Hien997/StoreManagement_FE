@@ -1,0 +1,1 @@
+import{j as a}from"./query-vendor-C1Ijw2rG.js";import{R as t}from"./index-C3yP_5Ta.js";function i({className:r,orientation:o="horizontal"}){return a.jsx("div",{role:"separator",className:t("shrink-0 bg-border",o==="horizontal"?"h-px w-full":"h-full w-px",r)})}export{i as S};

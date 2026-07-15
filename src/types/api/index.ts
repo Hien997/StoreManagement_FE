@@ -273,8 +273,12 @@ export interface OrderItemResponse {
   id: number;
   order_id: number;
   product_id: number;
-  quantity: number;
+  product_name: string;
+  sku: string;
   unit_price: number;
+  quantity: number;
+  discount_amount: number;
+  line_total: number;
 }
 
 export interface OrderItemRequest {
@@ -307,6 +311,72 @@ export interface CreateSalesOrderRequest {
 export interface UpdateSalesOrderRequest {
   status: "pending" | "completed" | "cancelled";
   note?: string;
+}
+
+/* ----------------------- Customer Sales Orders -------------------- */
+// Mirrors the customer-facing API documented in
+// .agents/skills/integrate-webapi/intergate.md (section 4).
+
+export interface CustomerOrderItemResponse {
+  id: number;
+  order_id: number;
+  product_id: number;
+  product_name: string;
+  sku: string;
+  unit_price: number;
+  quantity: number;
+  discount_amount: number;
+  line_total: number;
+}
+
+export interface CustomerOrderResponse {
+  id: number;
+  order_number: string;
+  customer_id: number;
+  warehouse_id: number;
+  reference: string;
+  status: "pending" | "confirmed" | "processing" | "shipped" | "delivered" | "cancelled";
+  payment_status: "pending" | "paid" | "refunded";
+  payment_method: string;
+  shipping_address: string;
+  billing_address: string;
+  subtotal: number;
+  discount_amount: number;
+  tax_amount: number;
+  shipping_fee: number;
+  total_amount: number;
+  notes: string;
+  order_date: string;
+  created_at: string;
+  items: CustomerOrderItemResponse[];
+}
+
+export interface CustomerOrderItemRequest {
+  product_id: number;
+  quantity: number;
+  unit_price: number;
+  product_name?: string;
+  sku?: string;
+  discount_amount?: number;
+  line_total?: number;
+}
+
+// The backend ignores any customer_id sent by the client and derives it from
+// the bearer token; warehouse_id defaults to 0 server-side. Therefore neither
+// field belongs in the customer request body.
+export interface CreateCustomerOrderRequest {
+  items: CustomerOrderItemRequest[];
+  billing_address?: string;
+  shipping_address?: string;
+  discount_amount?: number;
+  shipping_fee?: number;
+  subtotal?: number;
+  tax_amount?: number;
+  total_amount?: number;
+  notes?: string;
+  order_date?: string;
+  payment_method?: string;
+  reference?: string;
 }
 
 /* ---------------------------- Settings --------------------------- */
