@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from '@/shared/components/ui/dialog'
 import { Button } from '@/shared/components/ui/button'
-import { useCreateBrand, useUpdateBrand } from '@/features/brands/hooks'
+import { useCreateBrand, useUpdateBrand } from '@/features/brands'
 import type { BrandResponse } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { FormInput } from '@/shared/components/form'

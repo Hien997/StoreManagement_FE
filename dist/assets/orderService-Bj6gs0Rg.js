@@ -1,0 +1,1 @@
+import{aY as r}from"./index-C3yP_5Ta.js";const o={list:t=>r.get("/customer/orders",{params:t}).then(e=>e.data.data),getById:t=>r.get(`/customer/orders/${t}`).then(e=>e.data.data),create:t=>r.post("/customer/orders",t).then(e=>e.data.data)};export{o as c};

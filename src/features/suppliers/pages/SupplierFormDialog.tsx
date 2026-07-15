@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from '@/shared/components/ui/dialog'
 import { Button } from '@/shared/components/ui/button'
-import { useCreateSupplier, useUpdateSupplier } from '@/features/suppliers/hooks'
+import { useCreateSupplier, useUpdateSupplier } from '@/features/suppliers'
 import type { SupplierResponse } from '@/types/api'
 import { useTranslation } from 'react-i18next'
 import { FormInput } from '@/shared/components/form'

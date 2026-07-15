@@ -7,7 +7,7 @@ import { DataTable } from '@/shared/components/DataTable'
 import { Button } from '@/shared/components/ui/button'
 import { Badge } from '@/shared/components/ui/badge'
 import { ConfirmDialog } from '@/shared/components/ui/confirm-dialog'
-import { useBrands, useDeleteBrand } from '@/features/brands/hooks'
+import { useBrands, useDeleteBrand } from '@/features/brands'
 import { BrandFormDialog } from './BrandFormDialog'
 import { toBrand } from '@/types/api/mappers'
 import type { Brand } from '@/shared/lib/types'
@@ -31,11 +31,14 @@ export function BrandsPage() {
     setFormOpen(true)
   }
 
-  const openEdit = (b: Brand) => {
-    const raw = brandsData?.items.find((item) => String(item.id) === b.id) ?? null
-    setEditing(raw as never)
-    setFormOpen(true)
-  }
+  const openEdit = React.useCallback(
+    (b: Brand) => {
+      const raw = brandsData?.items.find((item) => String(item.id) === b.id) ?? null
+      setEditing(raw as never)
+      setFormOpen(true)
+    },
+    [brandsData],
+  )
 
   const handleDelete = async () => {
     if (!deleteTarget) return
@@ -49,48 +52,51 @@ export function BrandsPage() {
     }
   }
 
-  const columns: ColumnDef<Brand>[] = [
-    {
-      accessorKey: 'name',
-      header: t('common.name'),
-      cell: ({ row }) => (
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary">
-            <Tag className="h-4 w-4" />
+  const columns = React.useMemo<ColumnDef<Brand>[]>(
+    () => [
+      {
+        accessorKey: 'name',
+        header: t('common.name'),
+        cell: ({ row }) => (
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 text-primary">
+              <Tag className="h-4 w-4" />
+            </div>
+            <div>
+              <p className="font-medium">{row.original.name}</p>
+              <p className="text-xs text-muted-foreground">{row.original.code}</p>
+            </div>
           </div>
-          <div>
-            <p className="font-medium">{row.original.name}</p>
-            <p className="text-xs text-muted-foreground">{row.original.code}</p>
+        ),
+      },
+      { accessorKey: 'code', header: t('common.code'), cell: ({ getValue }) => <span className="text-sm">{getValue<string>()}</span> },
+      { accessorKey: 'country', header: t('common.country'), cell: ({ getValue }) => <span className="text-sm">{getValue<string>() || '—'}</span> },
+      {
+        accessorKey: 'isActive',
+        header: t('common.status'),
+        cell: ({ row }) => (
+          <Badge variant={row.original.isActive ? 'success' : 'secondary'} className="capitalize">
+            {row.original.isActive ? t('common.active') : t('common.inactive')}
+          </Badge>
+        ),
+      },
+      {
+        id: 'actions',
+        header: '',
+        cell: ({ row }) => (
+          <div className="flex justify-end gap-1" onClick={(e) => e.stopPropagation()}>
+            <Button variant="ghost" size="icon" onClick={() => openEdit(row.original)}>
+              <Pencil className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="text-destructive" onClick={() => setDeleteTarget(row.original)}>
+              <Trash2 className="h-4 w-4" />
+            </Button>
           </div>
-        </div>
-      ),
-    },
-    { accessorKey: 'code', header: t('common.code'), cell: ({ getValue }) => <span className="text-sm">{getValue<string>()}</span> },
-    { accessorKey: 'country', header: t('common.country'), cell: ({ getValue }) => <span className="text-sm">{getValue<string>() || '—'}</span> },
-    {
-      accessorKey: 'isActive',
-      header: t('common.status'),
-      cell: ({ row }) => (
-        <Badge variant={row.original.isActive ? 'success' : 'secondary'} className="capitalize">
-          {row.original.isActive ? t('common.active') : t('common.inactive')}
-        </Badge>
-      ),
-    },
-    {
-      id: 'actions',
-      header: '',
-      cell: ({ row }) => (
-        <div className="flex justify-end gap-1" onClick={(e) => e.stopPropagation()}>
-          <Button variant="ghost" size="icon" onClick={() => openEdit(row.original)}>
-            <Pencil className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon" className="text-destructive" onClick={() => setDeleteTarget(row.original)}>
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </div>
-      ),
-    },
-  ]
+        ),
+      },
+    ],
+    [t, openEdit],
+  )
 
   return (
     <div className="space-y-6">

@@ -24,14 +24,15 @@ import {
 } from 'recharts'
 
 import { PageHeader } from '@/shared/components/PageHeader'
+import { LayoutDashboard } from 'lucide-react'
 import { StatCard } from '@/shared/components/StatCard'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card'
 import { Badge } from '@/shared/components/ui/badge'
 import { Button } from '@/shared/components/ui/button'
-import { useProducts } from '@/features/products/hooks'
-import { useCustomers } from '@/features/customers/hooks'
-import { useOrders } from '@/features/orders/hooks'
-import { useSalesReport } from '@/features/reports/hooks'
+import { useProducts } from '@/features/products'
+import { useCustomers } from '@/features/customers'
+import { useOrders } from '@/features/orders'
+import { useSalesReport } from '@/features/reports'
 import { toProduct, toCustomer, toOrder } from '@/types/api/mappers'
 import { formatCurrency, formatRelative } from '@/shared/lib/format'
 
@@ -89,7 +90,7 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Dashboard" description="Welcome back! Here's what's happening in your store." />
+      <PageHeader title="Dashboard" description="Welcome back! Here's what's happening in your store." icon={LayoutDashboard} />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard title="Total Revenue" value={formatCurrency(revenue)} icon={DollarSign} trend={{ value: 12.5 }} description="all time" />

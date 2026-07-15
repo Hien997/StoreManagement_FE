@@ -9,8 +9,8 @@ import { StatCard } from '@/shared/components/StatCard'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/components/ui/card'
 import { Badge } from '@/shared/components/ui/badge'
 import { Button } from '@/shared/components/ui/button'
-import { useProducts } from '@/features/products/hooks'
-import { useInventory } from '@/features/inventory/hooks'
+import { useProducts } from '@/features/products'
+import { useInventory } from '@/features/inventory'
 import { toProduct, toStockMovement } from '@/types/api/mappers'
 import type { StockMovement } from '@/shared/lib/types'
 import { formatCurrency, formatDate } from '@/shared/lib/format'
@@ -48,25 +48,28 @@ export function InventoryPage() {
     return Object.entries(byDay).slice(-10).map(([day, v]) => ({ day, ...v }))
   }, [movements])
 
-  const columns: ColumnDef<StockMovement>[] = [
-    {
-      accessorKey: 'productName',
-      header: 'Product',
-      cell: ({ getValue }) => <span className="font-medium">{getValue<string>()}</span>,
-    },
-    {
-      accessorKey: 'type',
-      header: 'Type',
-      cell: ({ row }) => (
-        <Badge variant={typeVariant[row.original.type]} className="capitalize">
-          {row.original.type}
-        </Badge>
-      ),
-    },
-    { accessorKey: 'quantity', header: 'Qty', cell: ({ getValue }) => <span className="font-medium">{getValue<number>()}</span> },
-    { accessorKey: 'note', header: 'Note', cell: ({ getValue }) => <span className="text-sm text-muted-foreground">{getValue<string>()}</span> },
-    { accessorKey: 'createdAt', header: 'Date', cell: ({ getValue }) => <span className="text-sm">{formatDate(getValue<string>())}</span> },
-  ]
+  const columns = React.useMemo<ColumnDef<StockMovement>[]>(
+    () => [
+      {
+        accessorKey: 'productName',
+        header: 'Product',
+        cell: ({ getValue }) => <span className="font-medium">{getValue<string>()}</span>,
+      },
+      {
+        accessorKey: 'type',
+        header: 'Type',
+        cell: ({ row }) => (
+          <Badge variant={typeVariant[row.original.type]} className="capitalize">
+            {row.original.type}
+          </Badge>
+        ),
+      },
+      { accessorKey: 'quantity', header: 'Qty', cell: ({ getValue }) => <span className="font-medium">{getValue<number>()}</span> },
+      { accessorKey: 'note', header: 'Note', cell: ({ getValue }) => <span className="text-sm text-muted-foreground">{getValue<string>()}</span> },
+      { accessorKey: 'createdAt', header: 'Date', cell: ({ getValue }) => <span className="text-sm">{formatDate(getValue<string>())}</span> },
+    ],
+    [],
+  )
 
   return (
     <div className="space-y-6">
